@@ -104,7 +104,7 @@ def firstPage():
         if link and title and not "img" in str(title):
             addPosts(str(title), urllib.quote_plus(link.replace('&amp;','&')))
     # Topics
-    for table in soup.findAll('table'):
+    for table in soup.findAll('tr'):
         for line in table.findAll('a'):
             title = line.contents[0]
             link = line['href']
