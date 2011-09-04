@@ -56,9 +56,9 @@ def listPage(url):
     maxPage = soup.find('li', 'next-page').findPrevious('li').a['href']
     for inItem in soup.findAll('div', 'inItem'):
         try:
-            title = inItem.findAll('a')[1].contents[0]
+            title = inItem.findAll('a')[1].contents[0].replace('&amp;','&')
         except:
-            title = ""
+            title = "No title"
         link = inItem.find('a')['href']
         re_pinkbike = 'video/(\d+)/'
         id = re.findall(re_pinkbike, link)[0]
@@ -67,8 +67,7 @@ def listPage(url):
         url = 'http://lv1.pinkbike.org/vf/' + str(partId) + '/pbvid-' + str(id) + '.flv'
         thumb = inItem.find('img', 'thimg')['src']
         time = inItem.find('span', 'fblack').contents[0]
-        plot = inItem.find('p', 'uFullInfo f10 fgrey3').contents[0]
-        #
+        plot = inItem.find('p', 'uFullInfo f10 fgrey3').contents[0].strip()
         listitem=xbmcgui.ListItem(title, iconImage="DefaultFolder.png", thumbnailImage=thumb)
         listitem.setInfo(type="Video", infoLabels={ "Title": title, "Plot" : plot, "Duration" : time })
         listitem.setPath(url)
@@ -90,6 +89,8 @@ def nextPage(params):
 
 def firstPage():
     html = getHTML(urllib.unquote_plus(BASE_URL))
+    # https://bugs.launchpad.net/beautifulsoup/+bug/838022
+    BeautifulSoup.NESTABLE_TAGS['td'] = ['tr', 'table']
     soup = BeautifulSoup(html)
     # Favorites
     for links in soup.findAll('a','iconlink'):
@@ -102,13 +103,20 @@ def firstPage():
         except:
             link = None
         if link and title and not "img" in str(title):
-            addPosts(str(title), urllib.quote_plus(link.replace('&amp;','&')))
+            addPosts(('Most faved ' + str(title)), urllib.quote_plus(link.replace('&amp;','&')))
     # Topics
-    for table in soup.findAll('tr'):
-        for line in table.findAll('a'):
-            title = line.contents[0]
-            link = line['href']
-            addPosts(str(title), urllib.quote_plus(link.replace('&amp;','&')))
+    for table in soup.findAll('table'):
+        for line in table.findAll('tr'):
+            try:
+                title = line.find('a').contents[0]
+            except:
+                title = None
+            try:
+                link = line.find('a')['href']
+            except:
+                link = None
+            if title and link:
+                addPosts(str(title), urllib.quote_plus(link.replace('&amp;','&')))
     # Search
     addPosts('Search..', '&search=True')
     return
