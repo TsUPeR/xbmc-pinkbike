@@ -1,5 +1,5 @@
 """
- Copyright (c) 2010 Johan Wieslander, <johan[d0t]wieslander<(a)>gmail[d0t]com>
+ Copyright (c) 2010 Popeye
 
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
