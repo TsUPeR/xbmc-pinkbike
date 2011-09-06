@@ -5,15 +5,14 @@
        provider-name="Popeye">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
+    <import addon="script.module.beautifulsoup" version="3.0.8"/>
   </requires>
-  <extension point="xbmc.python.pluginsource"
-            library="default.py">
+  <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
     <platform>all</platform>
-    <summary>PinkBike</summary>
-    <description>Browse and play videos from pinkbike.com</description>
-    <disclaimer></disclaimer>
+    <summary>Watch videos from PinkBike</summary>
+    <description>Browse and play videos from mountain bike community pinkbike.com</description>
   </extension>
 </addon>
