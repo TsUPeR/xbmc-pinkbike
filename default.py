@@ -92,7 +92,8 @@ def firstPage():
             except:
                 link = None
             if title and link:
-                addPosts(str(title), urllib.quote_plus(link.replace('&amp;','&')))
+				if BASE_URL in link:
+					addPosts(str(title), urllib.quote_plus(link.replace('&amp;','&')))
     # Search
     addPosts('Search..', '&search=True')
     return
